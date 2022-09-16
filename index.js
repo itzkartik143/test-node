@@ -5,6 +5,7 @@ const args = require('minimist')(process.argv.slice(2));
 let homePage;
 let projectPage;
 let registrationPage;
+let registrationScript;
 
 fs.readFile("home.html", (err, data) => {
     if (err) throw err;
@@ -21,6 +22,11 @@ fs.readFile("registration.html", (err, data) => {
     registrationPage = data.toString();
 })
 
+fs.readFile("registration.js", (err, data) => {
+    if (err) throw err;
+    registrationScript = data.toString();
+})
+
 http.createServer((request, response) => {
     let url = request.url;
     response.writeHead(200, {'Content-Type': 'text/html'});
@@ -31,6 +37,10 @@ http.createServer((request, response) => {
             break;
         case "/registration":
             response.write(registrationPage);
+            response.end();
+            break;
+        case "/registration.js":
+            response.write(registrationScript);
             response.end();
             break;
         default:
